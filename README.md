@@ -172,7 +172,7 @@ brew install mysql
 - Fill URL with your server configuration and combine with entry file for NGSase (login.html) in your browser. For example:
     
     ```bash
-    http://127.0.0.1:4500/login.htmlFor
+    http://127.0.0.1:4500/login.html
     ```
     
     ![NGSase_URL](readme_images/NGSase_URL.gif)
