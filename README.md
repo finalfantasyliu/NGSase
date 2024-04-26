@@ -98,8 +98,7 @@ cutadapt --version
 
 ### subread
 
-- Download program from official website of subread
-[https://sourceforge.net/projects/subread/files/subread-2.0.6/](https://sourceforge.net/projects/subread/files/subread-2.0.6/)
+- Download program from official website of [subread](https://sourceforge.net/projects/subread/files/subread-2.0.6/)
 - Please replace 'YourSubReadPath' with the destination path for Subread and add this command to your shell configuration file, such as .zshrc for Zsh or .bashrc for Bash
     
     ```bash
