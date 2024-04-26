@@ -119,7 +119,7 @@ brew install mysql
 1. Clone the repository
     
     ```bash
-    git clone 
+    git clone https://github.com/finalfantasyliu/NGSase.git
     ```
     
 2. Ensure that these folders are located within the same directory as the NGSase binary file.
