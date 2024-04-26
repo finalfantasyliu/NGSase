@@ -1,0 +1,3 @@
+/Users/finalfantasyliu/Desktop/NGSase/cmake-build-debug/CMakeFiles/NGSase.dir
+/Users/finalfantasyliu/Desktop/NGSase/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/finalfantasyliu/Desktop/NGSase/cmake-build-debug/CMakeFiles/rebuild_cache.dir

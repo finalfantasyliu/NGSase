@@ -1,0 +1,69 @@
+body {
+  font-family: Arial, Helvetica;
+}
+
+.pannel {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(100, 89, 244, 1) 76%, rgba(0, 212, 255, 1) 100%);
+}
+
+.login-leftside {
+  flex: 1.2;
+  color: white;
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  /* Center vertically */
+  height: 100vh;
+  flex-direction: column;
+}
+
+.mark {
+
+  height: 80px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.markpic {
+  height: 80px;
+  margin-left: 40px;
+  margin-top: 10px;
+}
+
+.login-rightside {
+  flex: 1;
+  color: white;
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  height: 100vh;
+}
+
+.login-leftside,
+.login-rightside {
+  flex-basis: 45%;
+}
+
+@media screen and (max-width: 1100px) {
+  .pannel {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-leftside,
+  .login-rightside {
+    width: 100%;
+  }
+}

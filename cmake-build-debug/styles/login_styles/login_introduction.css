@@ -1,0 +1,47 @@
+.introduction-wrapper
+{
+  height:400px;
+  width:600px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex:2.0;
+  
+margin-left: 260px;
+/*border:2px grey solid;*/
+
+
+
+
+}
+.introduction
+{
+  margin-bottom:180px;
+}
+
+
+.introduction-title {
+  margin-bottom: 0;
+  margin-left: 0;
+
+  font-size: 110px;
+
+}
+
+.introduction-subtitle {
+  margin-top: 5px;
+  font-size: 25px;
+  font-weight: normal;
+  margin-bottom: 0px;
+  
+}
+
+.introduction-content {
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: normal;
+  margin-left:0px;
+ 
+
+
+}

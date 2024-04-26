@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var accountName = document.getElementById("user-account");
+            accountName.textContent = "Info_Loading_Faild";
+            baseURL = "/analysis/" + accountName.textContent + "/";
+
+            // var base = document.createElement('base');
+            // base.href = baseURL;
+            // document.head.appendChild(base);
+        });
+    </script>
+    <link rel="stylesheet" href="../styles/analysis_styles/analysis_general.css">
+    <link rel="stylesheet" href="../styles/analysis_styles/analysis_main.css">
+    <link rel="stylesheet" href="../styles/analysis_styles/analysis_sidebar.css">
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>NGSase</title>
+</head>
+
+<body>
+    <div class="grid-container">
+        <header class="header">
+
+            <div class="header-right">
+                <div id="user-account"></div>
+                <span class="material-symbols-outlined">
+                    account_circle
+                </span>
+            </div>
+        </header>
+
+        <aside id="sidebar">
+            <div class="sidebar-mark">
+                <img src="../images/NGSase.svg" class="markpic">
+            </div>
+            <div class="sidebar-list">
+                <a href="" class="active">
+                    <span class="material-symbols-outlined">valve</span>
+                    <h3 id="pipelines-tab">Pipelines</h3>
+                </a>
+                <a href="">
+                    <span class="material-symbols-outlined">subject</span>
+                    <h3 id="projects-tab">Projects</h3>
+                </a>
+                <a href="">
+                    <span class="material-symbols-outlined">info</span>
+                    <h3 id="information-tab">Information</h3>
+                </a>
+                <a href="" class="log_out">
+                    <span class="material-symbols-outlined">logout</span>
+                    <h3 id="logout-tab">Logout</h3>
+                </a>
+                <div>
+        </aside>
+        <main class="main-container">
+            <div class="pipelines" id="pipelines">
+                <div class="left-side-pannel">
+
+                    <div class="pipeline-tab">
+                        <div class="pipeline-title">Pipeline Selection</div>
+                        <div class="table-box">
+                            <div class="table-wrap">
+                                <input type="radio" id="RNA-Seq-tab" name="tabGroup1" class="tab" checked>
+                                <label for="RNA-Seq-tab" class="tab-label"
+                                    onclick="showTabContent('RNA-Seq-content','tab-content')">RNA-Seq</label>
+                                <input type="radio" id="Custom-tab" name="tabGroup1" class="tab">
+                                <label for="Custom-tab" class="tab-label"
+                                    onclick="showTabContent('Custom-content','tab-content')">Custom</label>
+                            </div>
+                            <div class="tab-content">
+                                <div class="RNA-Seq-content" id="RNA-Seq-content">
+                                    <div>
+                                        <div class="pipeline-name">
+                                            <label>Pipeline name:</label>
+                                            <input type="text" id="RNA-Seq-content-pipeline-name">
+                                        </div>
+                                        <div class="step-block">
+                                            <h3>Quality Control</h3>
+                                            <hr>
+                                            <input type="radio" id="fastp" name="qc-tools" checked class="qc-tools">
+                                            <label for="fastp"
+                                                onclick="showToolSettings('fastp','RNA-Seq-tab',composeSettingFastp)">Fastp</label>
+                                            <input type="radio" id="cutadapt" name="qc-tools" class="qc-tools">
+                                            <label for="cutadapt"
+                                                onclick="showToolSettings('cutadapt','RNA-Seq-tab',composeSettingCutadapt)">Cutadapt</label>
+                                        </div>
+                                        <div class="step-block">
+                                            <h3>Reads alignment</h3>
+                                            <hr>
+                                            <input type="radio" id="kallisto" name="align-tools" class="align-tools"
+                                                checked>
+                                            <label for="kallisto"
+                                                onclick="showToolSettings('kallisto','RNA-Seq-tab',composeSettingKallisto)">Kallisto</label>
+                                            <input type="radio" id="subread" name="align-tools" class="align-tools">
+                                            <label for="subread"
+                                                onclick="showToolSettings('subread','RNA-Seq-tab',composeSettingSubread)">Subread</label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="Custom-content" id="Custom-content">
+                                    <div>
+                                        <div class="pipeline-name">
+                                            <label>Pipeline name:</label>
+                                            <input type="text" id="custom-content-pipeline-name">
+                                        </div>
+                                        <table id="tool-table" class="tool-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tool</th>
+                                                    <th>ADD/DEL Action</th>
+                                                    <th>Settings</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <select onchange="customToolSelectChange(event,this)"
+                                                            class="custom-tool-select">
+                                                            <optgroup label="Quality Control">
+                                                                <option value="fastp_fastq_fasta">Fastp 0.23.4</option>
+                                                                <option value="cutadapt_fastq_fasta">Cutadapt 4.7
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Reads Alignment">
+                                                                <option value="kallisto_fasta_h5">Kallisto 0.46.1
+                                                                </option>
+                                                                <option value="subread_fasta_bam">Subread 2.0.6</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="add-del-btn-layout">
+                                                            <button type="button" onclick="addRow(event,this)"
+                                                                class="add-row-button">
+                                                                <span class="material-symbols-outlined">
+                                                                    add_box
+                                                                </span>
+                                                            </button>
+                                                            <button type="button" onclick="deleteRow(event,this)"
+                                                                class="delete-row-button">
+                                                                <span class="material-symbols-outlined">
+                                                                    delete
+                                                                </span>
+                                                            </button>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-setting-uuid"
+                                                            onmouseover="displayTooltipContent(this)">checkuuid
+                                                            <span class="custom-setting-tooltip"></span>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="pipeline-send-server-process">
+                            <div class="pipeline-check-wrap" id="pipeline-check-wrap">
+                                <div id="pipeline-check-status"></div>
+                            </div>
+                            <div class="loader" id="loader"></div>
+                            <button class="confirm-button" onclick="sendPipelineToServer(this)">Confirm</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="right-side-pannel">
+
+                    <div class="settings">
+                        <div class="setting-title">Tool Settings</div>
+                        <div class="setting-box" id="setting-box">
+                            <p class="click-setting-note">*Please click the tool before modifying any setting*</p>
+                            <div class="tool-setting-fastp" id="tool-setting-fastp" style="display:block">
+                                <h2>Fastp</h2>
+                                <div>
+
+                                    <div class="toggle-box">
+                                        <div class="toggle-box-title">Merge pair-end read</div>
+
+                                        <p>For paired-end input, merge each pair of reads into a single read if they are
+                                            overlapped.</p>
+
+                                        <label class="toggle" for="toggle-merge-pair-end-read">
+                                            <input type="checkbox" id="toggle-merge-pair-end-read" class="toggle-input"
+                                                onchange="editSetting(this,'Merge pair-end read','fastp')">
+                                            <div class="toggle-fill"></div>
+                                        </label>
+                                    </div>
+                                    <div class="toggle-box">
+                                        <div class="toggle-box-title">Adapter trimming</div>
+                                        <p>This option is enabled by default.</p>
+                                        <label class="toggle" for="toggle-adatper-trimming">
+                                            <input type="checkbox" id="toggle-adatper-trimming" class="toggle-input"
+                                                checked onchange="editSetting(this,'Adapter trimming','fastp')">
+                                            <div class="toggle-fill"></div>
+                                        </label>
+                                    </div>
+
+                                    <div class="toggle-box">
+                                        <div class="toggle-box-title">Poly-G trimming</div>
+                                        <p>Force polyG tail trimming, by default trimming is automatically enabled for
+                                            Illumina
+                                            NextSeq/NovaSeq data</p>
+                                        <label class="toggle" for="toggle-poly-g-trimming">
+                                            <input type="checkbox" id="toggle-poly-g-trimming" class="toggle-input"
+                                                checked onchange="editSetting(this,'Poly-G trimming','fastp')">
+                                            <div class="toggle-fill"></div>
+                                        </label>
+                                    </div>
+
+                                    <div class="options">
+                                        <div class="option-title">Minimum length</div>
+                                        <p>reads shorter than length_required will be discarded, default is 15.
+
+                                        </p>
+                                        <input type="number" value=15 min=10
+                                            onchange="editSetting(this,'Minimum length','fastp')" required>
+                                    </div>
+                                    <div class="options">
+                                        <div class="option-title">Maximum length</div>
+                                        <p> reads longer than maximum length will be discarded, default 0 means no
+                                            limitation.</p>
+                                        <input type="number" value=0 min=0
+                                            onchange="editSetting(this,'Maximum length','fastp')" required>
+                                    </div>
+                                    <div class="options">
+                                        <div class="option-title">N-base limit</div>
+                                        <p> if one read's number of N base is >n_base_limit, then this read/pair is
+                                            discarded. Default is 5
+                                        </p>
+                                        <input type="number" value=5 min=0
+                                            onchange="editSetting(this,'N-base limit','fastp')" required>
+                                    </div>
+                                    <div class="options">
+                                        <div class="option-title">Phred score</div>
+                                        <p>the quality value that a base is qualified. Default 15 means phred quality
+                                            >=Q15 is qualified.
+                                        </p>
+                                        <input type="number" value=15 min=0
+                                            onchange="editSetting(this,'Phred score','fastp')" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tool-setting-cutadapt" id="tool-setting-cutadapt" style="display: none;">
+                                <h2>Cutadapt</h2>
+                                <p class="notion">*This tool's settings are only supported for single-end sequence
+                                    processing, the
+                                    pair-end sequence would be supported in nearly future.</p>
+                                <div>
+                                    <div class="cutadapt-options">
+                                        <div class="adapter-selection">
+                                            <div class="adapter-title">Adapter type</div>
+                                            <div>
+                                                <div class="adapter-definition">
+                                                    <div>Regular adapter</div>
+                                                    <p>Adapter is a piece of DNA ligated to the 5&#39; / 3&#39; end of
+                                                        the DNA fragment of
+                                                        interest.
+                                                    </p>
+                                                </div>
+                                                <div class="adapter-definition">
+                                                    <div>Anchored adapter</div>
+                                                    <p>An anchored 5&#39; / 3&#39; adapter is an adapter that is
+                                                        expected to occur in full length
+                                                        at
+                                                        the
+                                                        beginning of the read. </p>
+                                                </div>
+
+                                                <div class="adapter-definition">
+                                                    <div>Non-interal 5'/3' adapter</div>
+                                                    <p>The non-internal 5&#39; and 3&#39; adapter types disallow
+                                                        internal occurrences of the
+                                                        adapter
+                                                        sequence. This is like a less strict version of anchoring: The
+                                                        adapter must always be at one
+                                                        of the ends of the read, but - unlike anchored adapters -
+                                                        partial occurrences are also ok.
+                                                    </p>
+                                                </div>
+
+                                                <div class="adapter-definition">
+                                                    <div>Linked adapter</div>
+                                                    <p>
+                                                        If your sequence of interest is surrounded by a 5&#39; and a
+                                                        3&#39; adapter, and you want to
+                                                        remove
+                                                        both adapters, then you can use a linked adapter. A linked
+                                                        adapter combines a 5&#39; and a
+                                                        3&#39;
+                                                        adapter.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <select class="adapter-select" id="adapter-select"
+                                                onchange="editSetting(this,'Adapter type','cutadapt')">
+                                                <option>Regular adapter</option>
+                                                <option>Anchored adapter</option>
+                                                <option>Non-internal 5'/3' adapter</option>
+                                            </select>
+
+
+
+                                            <div class="sequence-end-input">
+                                                <div class="checkbox-btn">
+                                                    <input type="checkbox" class="checkbox-input" id='read-5-end-check'
+                                                        onchange="editSetting(this,'read5end checked','cutadapt')">
+                                                    <label class="checkbox-label">
+                                                        <div>5' end: </div>
+                                                        <input id="read5end-sequence" type="text"
+                                                            onchange="editSetting(this,'read5end sequence','cutadapt')">
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox-btn">
+                                                    <input type="checkbox" class="checkbox-input" id='read-3-end-check'
+                                                        onchange="editSetting(this,'read3end checked','cutadapt')">
+                                                    <label class="checkbox-label">
+                                                        <div>3' end: </div>
+                                                        <input id="read3end-sequence" type="text"
+                                                            onchange="editSetting(this,'read3end sequence','cutadapt')">
+                                                    </label>
+                                                </div>
+
+                                                <div class="adapter-note"><strong>Note: </strong>The Linked adapter
+                                                    would be setted by clicking
+                                                    both 5' end and 3' end checkbox</div>
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">Phred score</div>
+                                            <p>the quality value that a base is qualified. Default 33 means phred
+                                                quality >=Q33 is qualified.
+                                            </p>
+                                            <input type="number" value=33 min=0
+                                                onchange="editSetting(this,'Phred score','cutadapt')" required>
+
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Minimum length</div>
+                                            <p>reads shorter than length_required will be discarded, default is 15.
+
+                                            </p>
+                                            <input type="number" value=15 min=0
+                                                onchange="editSetting(this,'Minimum length','cutadapt')" required>
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">Maximum length</div>
+                                            <p> reads longer than maximum length will be discarded, default 0 means no
+                                                limitation.</p>
+                                            <input type="number" value=600 min=0
+                                                onchange="editSetting(this,'Maximum length','cutadapt')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">N-base limit</div>
+                                            <p> if one read's number of N base is >n_base_limit, then this read/pair is
+                                                discarded. Default is
+                                                5
+                                            </p>
+                                            <input type="number" value=5 min=0
+                                                onchange="editSetting(this,'N-base limit','cutadapt')" required>
+                                        </div>
+
+                                        <div class="toggle-box">
+                                            <div class="toggle-box-title">Poly-A/poly-T trimming</div>
+                                            <p>Force polyA/T tail trimming</p>
+                                            <label class="toggle" for="toggle-poly-a-trimming">
+                                                <input type="checkbox" id="toggle-poly-a-trimming" class="toggle-input"
+                                                    onchange="editSetting(this,'Poly-A/poly-T trimming','cutadapt')">
+                                                <div class="toggle-fill"></div>
+                                            </label>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="tool-setting-kallisto" id="tool-setting-kallisto" style="display: none;">
+                                <h2>Kallisto</h2>
+                                <p class="notion">*This tool's settings are only supported for Bulk RNA sequencing, the
+                                    sigle-cell
+                                    sequecning would be supported in nearly future.</p>
+                                <div class="kallisto-input-box">
+                                    <div class="kallisto-index">
+                                        <p class="function-category">Index</p>
+                                        <div class="function-notation">kallisto index builds an index from a FASTA
+                                            formatted file of target
+                                            sequences.</div>
+                                        <div class="index-upload">
+                                            <div class="index-upload-title-btn">
+                                                <div class="index-upload-title">Upload/Choose index</div>
+                                                <button class="index-sync-btn" id="kallisto-index-sync-btn"
+                                                    onclick="syncWithAccount('genome-index-select-kallisto','kallisto','genomeIndex')"></button>
+                                                <label for="kallisto-index-sync-btn" class="index-sync-btn-icon">
+                                                    <span class="material-symbols-outlined">
+                                                        sync
+                                                    </span>
+                                                </label>
+                                                <label class="index-sync-note">sync with account</label>
+                                            </div>
+
+
+                                            <div class="index-upload-btn">
+                                                <select id="genome-index-select-kallisto"
+                                                    onchange="editSetting(this,'Genome index name','kallisto')">
+                                                    <option>Create New Index</option>
+                                                </select>
+                                                <label for="upload-btn-kallisto-genome">
+                                                    <span class="material-symbols-outlined">
+                                                        upload_file
+                                                    </span>
+                                                </label>
+                                                <input type="file" id="upload-btn-kallisto-genome"
+                                                    onchange="displayFileName(this,'kallisto-genome')">
+                                                <div id="file-name-kallisto-genome"></div>
+                                            </div>
+                                            <div class="index-upload-note"><strong>Note: </strong>If you create new
+                                                index file, the name of it
+                                                would be the uploaded file's name without file extension </div>
+
+
+
+
+
+
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">K-mers</div>
+                                            <p> k-mer (odd) length (default: 31, max value: 31)
+                                            </p>
+                                            <input type="number" value=31 min=1
+                                                onchange="editSetting(this,'K-mers','kallisto')" required>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                    <div class="kallisto-quant">
+                                        <p class="function-category">Qunatification</p>
+                                        <div class="function-notation">kallisto quant runs the quantification algorithm.
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">Bootstrap samples</div>
+                                            <p> Number of bootstrap samples (default: 0)
+                                            </p>
+                                            <input type="number" value=0 min=0
+                                                onchange="editSetting(this,'Bootstrap samples','kallisto')" required>
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">Seeds</div>
+                                            <p>Seed for the bootstrap sampling (default: 42)
+                                            </p>
+                                            <input type="number" value=42 min=1
+                                                onchange="editSetting(this,'Seeds','kallisto')" required>
+                                        </div>
+
+
+
+                                        <div class="options">
+                                            <div class="option-title">Fragment length</div>
+                                            <p>Estimated average fragment length.The default is 0;
+                                            </p>
+                                            <input type="number" value=0 min=0
+                                                onchange="editSetting(this,'Fragment length','kallisto')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Standard deviation of Fragment length</div>
+                                            <p> Estimated standard deviation of fragment length.The default is 0;
+                                            </p>
+                                            <input type="number" value=0 min=0
+                                                onchange="editSetting(this,'Standard deviation of Fragment length','kallisto')" required>
+                                            <div class="fragment-note">
+                                                <strong>Note: </strong>The options of fragment length and standard
+                                                deviation of fragment length
+                                                must be typed in single-end reads, the value would be generated in
+                                                paired-end reads
+                                                automatically.
+                                            </div>
+                                        </div>
+
+
+                                        <div class="toggle-box">
+                                            <div class="toggle-box-title">Single overhang</div>
+                                            <p>Include reads where unobserved rest of fragment is predicted to lie
+                                                outside a transcript</p>
+                                            <label class="toggle" for="toggle-single-overhang">
+                                                <input type="checkbox" id="toggle-single-overhang" class="toggle-input"
+                                                    onchange="editSetting(this,'Single overhang','kallisto')">
+                                                <div class="toggle-fill"></div>
+                                            </label>
+                                        </div>
+
+                                        <div class="toggle-box">
+                                            <div class="toggle-box-title">Plain text</div>
+                                            <p>Output plaintext instead of HDF5</p>
+                                            <label class="toggle" for="toggle-plain-text">
+                                                <input type="checkbox" id="toggle-plain-text" class="toggle-input"
+                                                    onchange="editSetting(this,'Plain text','kallisto')">
+                                                <div class="toggle-fill"></div>
+                                            </label>
+                                        </div>
+
+
+                                        <!--                    <div class="toggle-box">-->
+                                        <!--                      <div class="toggle-box-title">Pseudobam</div>-->
+                                        <!--                      <p>Save pseudoalignments to transcriptome to BAM file</p>-->
+                                        <!--                      <label class="toggle" for="toggle-pseudobam">-->
+                                        <!--                        <input type="checkbox" id="toggle-pseudobam" class="toggle-input"-->
+                                        <!--                          onchange="editSetting(this, 'Pseudobam','kallisto')">-->
+                                        <!--                        <div class="toggle-fill"></div>-->
+                                        <!--                      </label>-->
+                                        <!--                    </div>-->
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="tool-setting-subread" id="tool-setting-subread" style="display: none;">
+                                <h2>Subread</h2>
+                                <p class="notion">*This tool's settings are both supported for DNA and RNA mapping ,but
+                                    for RNA mapping
+                                    is only supported for the purpose of gene expression analyis. For other purposes
+                                    (eg. detecting
+                                    genomic variations) would be supported in nearly future.</p>
+                                <div class="subread-input-box">
+
+                                    <div class="subread-index">
+                                        <p class="function-category">Index</p>
+                                        <div class="function-notation">The subread-buildindex program builds an index
+                                            for reference genome
+                                            by creating a hash table in which keys are 16bp mers (subreads) extracted
+                                            from the genome and
+                                            values are their chromosomal locations.</div>
+                                        <div class="index-upload">
+                                            <div class="index-upload-title-btn">
+                                                <div class="index-upload-title">Upload/Choose index </div>
+                                                <button class="index-sync-btn" id="subread-index-sync-btn"
+                                                    onclick="syncWithAccount('genome-index-select-subread','subread','genomeIndex')"></button>
+                                                <label for="subread-index-sync-btn" class="index-sync-btn-icon">
+                                                    <span class="material-symbols-outlined">
+                                                        sync
+                                                    </span>
+                                                </label>
+                                                <label class="index-sync-note">sync with account</label>
+                                            </div>
+
+
+                                            <div class="index-upload-btn">
+                                                <select id='genome-index-select-subread'
+                                                    onchange="editSetting(this,'Genome index name','subread')">
+                                                    <option>Create New Index</option>
+                                                </select>
+                                                <label for="upload-btn-subread-genome">
+                                                    <span class="material-symbols-outlined">
+                                                        upload_file
+                                                    </span>
+                                                </label>
+                                                <input type="file" id="upload-btn-subread-genome"
+                                                    onchange="displayFileName(this,'subread-genome')">
+                                                <div id="file-name-subread-genome" class="index-file-name"></div>
+                                            </div>
+                                            <div class="index-upload-note"><strong>Note: </strong>If you create new
+                                                index file, the name of it
+                                                would be the uploaded file's name without file extension </div>
+
+
+
+
+
+
+                                        </div>
+                                        <div class="options">
+                                            <div class="option-title">Subreads threshold</div>
+                                            <p>
+                                                Specify the threshold for removing uninformative subreads (highly
+                                                repetitive 16bp mers).
+                                                Subreads will be excluded from the index if they occur more than
+                                                threshold number of times in
+                                                the reference genome. Default value is 100.
+                                            </p>
+                                            <input type="number" value=100 min=0
+                                                onchange="editSetting(this,'Subreads threshold','subread')" required>
+                                        </div>
+
+                                        <div class="toggle-box">
+                                            <div class="toggle-box-title">Full index</div>
+                                            <p>Build a full index for the reference genome. 16bp mers (subreads) will be
+                                                extracted from every
+                                                position of a reference genome.</p>
+                                            <label class="toggle" for="toggle-full-index">
+                                                <input type="checkbox" id="toggle-full-index" class="toggle-input"
+                                                    onchange="editSetting(this,'Full index','subread')">
+                                                <div class="toggle-fill"></div>
+                                            </label>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                    <div class="subread-align">
+
+                                        <p class="function-category">Mapping</p>
+                                        <div class="function-notation">The subread-align program extracts a number of
+                                            subreads from each
+                                            read and then uses these subreads to vote for the mapping location of the
+                                            read.</div>
+
+                                        <div class="options">
+                                            <div class="option-title">Sequencing data type</div>
+                                            <p>For genomic DNA-seq data, the aligner takes into account both the number
+                                                of matched bases and
+                                                the number of mis-matched bases to determine the the best mapping
+                                                location after applying
+                                                the "seed-and-vote" approach for read mapping. For RNA-seq data, only
+                                                the number of mismatched
+                                                bases is considered for determining the best mapping location.
+                                            </p>
+
+                                            <select class="option-select" id="subread-squence-type-select"
+                                                onchange="editSetting(this,'Sequencing data type','subread')">
+                                                <option value="DNA">
+                                                    DNA
+                                                </option>
+                                                <option value="RNA">
+                                                    RNA
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="index-upload">
+                                            <div class="index-upload-title-btn">
+                                                <div class="index-upload-title">Upload/Choose GTF</div>
+                                                <button class="index-sync-btn" id="subread-gtf-sync-btn"
+                                                    onclick="syncWithAccount('gtf-index-select-subread','subread','gtf')"></button>
+                                                <label for="subread-gtf-sync-btn" class="index-sync-btn-icon">
+                                                    <span class="material-symbols-outlined">
+                                                        sync
+                                                    </span>
+                                                </label>
+                                                <label class="index-sync-note">sync with account</label>
+                                            </div>
+
+                                            <div class="index-upload-btn">
+                                                <select id="gtf-index-select-subread"      onchange="editSetting(this,'GTF index name','subread')">
+                                                    <option>Upload New GTF</option>
+                                                </select>
+                                                <label for="upload-btn-subread-gtf">
+                                                    <span class="material-symbols-outlined">
+                                                        upload_file
+                                                    </span>
+                                                </label>
+                                                <input type="file" id="upload-btn-subread-gtf"
+                                                    onchange="displayFileName(this,'subread-gtf')">
+                                                <div id="file-name-subread-gtf" class="index-file-name"></div>
+                                            </div>
+                                            <div class=index-upload-note><strong>Note:</strong>Only support for GTF
+                                                (Gene Transfer Format). Please make sure that the "gene id" attribute
+                                                can be found in 9th column of your GTF annotation
+                                            </div>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Minimum fragment length</div>
+                                            <p>Specify the minimum fragment/template length, 50 by default
+                                            </p>
+                                            <input type="number" value=50 min=0
+                                                onchange="editSetting(this,'Minimum fragment length','subread')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Maximum fragment length</div>
+                                            <p>Specify the maximum fragment/template length, 600 by default
+                                            </p>
+                                            <input type="number" value=600 min=0
+                                                onchange="editSetting(this,'Maximum fragment length','subread')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Indels</div>
+                                            <p>Specify the number of INDEL bases allowed in the mapping. 5 by default.
+                                                Indels of up to 200bp
+                                                long can be detected.
+                                            </p>
+                                            <input type="number" value=5 min=0
+                                                onchange="editSetting(this,'Indels','subread')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Consensus subreads threshold</div>
+                                            <p>Specify the consensus threshold, which is the minimal number of consensus
+                                                subreads required
+                                                for reporting a hit. The consensus subreads are those subreads which
+                                                vote for the same location
+                                                in the reference genome for the read. If pair-end read data are
+                                                provided, at least one of the
+                                                two reads from the same pair must satisfy this criteria. The default
+                                                value is 3
+                                            </p>
+                                            <input type="number" value=3 min=0
+                                                onchange="editSetting(this,'Consensus subreads threshold','subread')" required>
+                                        </div>
+
+                                        <div class="options">
+                                            <div class="option-title">Maximum mismatches</div>
+                                            <p>Specify the maximum number of mis-matched bases allowed in the alignment.
+                                                3 by default.
+                                            </p>
+                                            <input type="number" value=3 min=0
+                                                onchange="editSetting(this,'Maximum mismatches','subread')" required>
+                                        </div>
+
+                                        <div class="toggle-box">
+                                            <div class="toggle-box-title">Sort reads by coordinates</div>
+                                            <p>If specified, reads will be sorted by their mapping coordinates in the
+                                                mapping output. This
+                                                option is applicable for BAM output only. A BAI index file will also be
+                                                generated for each BAM
+                                                file so the BAM files can be directly loaded into a genome browser such
+                                                as IGB or IGV.</p>
+                                            <label class="toggle" for="toggle--sortReadsByCoordinate">
+                                                <input type="checkbox" id="toggle--sortReadsByCoordinate"
+                                                    class="toggle-input"
+                                                    onchange="editSetting(this,'Sort reads by coordinates','subread')">
+                                                <div class="toggle-fill"></div>
+                                            </label>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="projects" id="projects">
+
+                <div class="projects-block">
+                    <div class="projects-management-title">Project Management</div>
+
+
+                    <div class="projects-tab">
+                        <div class="projects-table-bar">
+                            <div class="projects-table-wrap">
+                                <input type="radio" id="newTab" name="projectsTabGroup1" class="tab" checked>
+                                <label for="newTab" class="tab-label"
+                                    onclick="showTabContent('project-new-table','projects-tab-custom')">New</label>
+                                <input type="radio" id="previousTab" name="projectsTabGroup1" class="tab">
+                                <label for="previousTab" class="tab-label"
+                                    onclick="showTabContent('project-previous-table','projects-tab-custom')">Previous</label>
+                            </div>
+
+
+
+                        </div>
+                        <div class="projects-tab-content">
+
+                            <div class="popup-project" id="add-project-window">
+                                <div class="popup-cancel">
+                                    <button class="popup-cancel-btn" id="popCancelBtn"
+                                        onclick="popupWindow('add-project-window',false)"></button>
+                                    <label class="popup-cancel-label" for="popCancelBtn">
+                                        <span class="material-symbols-outlined">
+                                            close
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="popup-input">
+                                    <div class="popup-input-title">Create new project</div>
+                                    <div class="popup-input-content">
+                                        <div class="project-name-input">
+                                            <div>Project Name</div>
+                                            <input type="text" id="project-name-input-value">
+                                        </div>
+                                        <div class="pipeline-select-input">
+                                            <div class=pipeline-title-btn>
+                                                <div>Pipeline</div>
+                                                <button id="pipeline-sync-btn"></button>
+                                                <label for="pipeline-sync-btn" class="pipeline-sync-btn-icon"
+                                                    onclick="syncWithAccount('project-pipeline-input-value','pipeline','')">
+                                                    <span class="material-symbols-outlined">
+                                                        sync
+                                                    </span>
+                                                </label>
+                                                <label class="pipeline-sync-note">sync with account</label>
+                                            </div>
+
+                                            <select id="project-pipeline-input-value">
+                                            </select>
+                                        </div>
+                                        <div class="file-upload-input">
+                                            <div>File Upload</div>
+                                            <div class="file-upload-input-label">
+                                                <div class="file-name-display" id="file-name-raw-data"></div>
+                                                <label for="raw-data-upload">
+                                                    <span class="material-symbols-outlined">
+                                                        upload_file
+                                                    </span>
+
+
+                                                </label>
+
+
+                                                <input type="file" id="raw-data-upload"
+                                                    onchange="displayFileName(this,'raw-data')" multiple></input>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="paired-end-check">
+                                            <div class="paired-end-check-btn">
+                                                <input type="checkbox" id="paired-end-checkbox">
+                                                <label for="paired-end-checkbox">Paired-end Read</label>
+                                            </div>
+
+                                            <div class="paired-end-check-note"><strong>Note: </strong>Please ensure that
+                                                your paired-end read
+                                                files are correctly labeled with 'R1' for the forward strand and 'R2'
+                                                for the reverse strand,
+                                                and that they share the same file name set. Files labeled in this manner
+                                                and sharing the same
+                                                name set will be recognized as a paired-end read set.</div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <div class="popup-input-button">
+                                    <div id="project-check-wrap" class="project-check-wrap">
+                                        <div id="project-check-status"></div>
+                                    </div>
+                                    <button onclick="addProjectRow()">Confirm</button>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="projects-tab-custom">
+                                <div class="project-new-table" id="project-new-table">
+                                    <div class="add-project-zone">
+                                        <button class="add-project-button" id="addProjectButton"
+                                            onclick="popupWindow('add-project-window',true)">
+                                        </button>
+
+                                        <label for="addProjectButton">
+                                            <span class="material-symbols-outlined" for="addProjectButton">
+                                                add_box
+                                            </span>
+                                            Add new project</label>
+                                    </div>
+                                    <div class="table-background">
+                                        <table class="new-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Project</th>
+                                                    <th>Date</th>
+                                                    <th>status</th>
+                                                    <th>Download</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="new-table">
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                                <div class="project-previous-table" id="project-previous-table">
+                                    <p>
+                                        Analyzed data is only preserved for <strong>7</strong> days.
+                                    </p>
+                                    <div class="table-background">
+                                        <table class="previous-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Project</th>
+                                                    <th>Date</th>
+                                                    <th>status</th>
+                                                    <th>Download</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="previous-table">
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+              
+
+            </div>
+            <div class="information" id="information">
+                <div class="information-block">
+                    <div class="system-design-title">System Design</div>
+                    <div class="information-content">
+                      
+                        <div class="system-design-img">
+                        <img src="/images/NGSase_system_design.svg" >
+                        </div>
+                          <div class="information-description">
+                            <h1>About</h1>
+                             <hr> 
+                            <p>The NGS analysis used to be intimidating and had a higher learning curve for "non-coding" persons.
+                                It is not easy for biologists who wish to engage in NGS analysis to gather powerful evidence from a gene perspective.
+                                 Nowadays, practical and useful interactive NGS analysis interfaces are still controlled by biotech companies. 
+                                 Open-source analysis websites may even become archived or lack highly customized pipeline construction options.
+                                  Therefore, young and inexperienced biologists or those passionate about biology may need to invest significant effort in learning coding or spend substantial amounts of money on NGS analysis.</p>
+                            <p>NGSase is designed to provide a user-friendly and highly customized interface to its target audience.Here are three highlight features: </p>
+                            <div class="information-list-description">
+                                <p>1. Users can easily combine various NGS tools to create their own pipelines.</p>
+                                <p>2. Each pipeline can be executed in parallel.</p>
+                                <p>3. Users can effortlessly set up NGSase web servers for internal use.</p>
+                            </div>
+                            <p>The NGSase web server is designed based on the classic Reactor model. The principle of the Reactor model revolves around event handling strategy, which comprises three key components:</p>
+                            <div class="information-list-description">
+                                <p>1. Event loop: Accompanied by an IO-multiplexing function to dispatch requests to handlers correctly.</p>
+                                <p>2. Reactor: Considered as an event repository to store essential information for monitoring events.
+<p>3. Event handler: Processes events with appropriate series functions, such as IO operations or customized handling functions.</p>
+
+                            </div>
+                <p> With these key components, managing client connections becomes easier, and the system becomes more scalable, allowing for the exchange or modification of any function as needed. The NGSase web server not only takes advantage of the Reactor model but also collaborates with multi-threading techniques to facilitate client request processing. It dynamically adjusts the number of processing threads to maintain high efficiency and appropriate resource usage for each client request. 
+                            The figure alongside the description provides a simple illustration of the NGSase system design. </p> 
+<div class="biography-block">
+ <div class="biography">
+                    <i class="fa fa-github" style="font-size:24px"></i>
+                    <a>finalfantasyliu/NGSase</a>
+                </div>
+                <div class="biography">
+                   <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    <a href="https://scholar.google.com/citations?user=LbtK9eoAAAAJ&hl=en" target="_blank">Hsien-Hao Liu</a>
+                </div>
+</div>
+               
+                <p class="copyright">&copy; 2024 Frank Liu. Powered by Frank Liu.</p>
+
+
+
+
+
+
+
+
+
+
+                            
+                        
+                            
+                
+                            
+                        </div>
+                    </div>
+                  
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+    <script src="../scripts/analysis_script.js"></script>
+</body>
+
+</html>
