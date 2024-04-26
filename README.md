@@ -190,7 +190,7 @@ For more information, also see:
 
 - **Email**
     
-    > b10247050@gmail.com
-    >r08633005@ntu.edu.tw
+  - b10247050@gmail.com
+  - r08633005@ntu.edu.tw
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
