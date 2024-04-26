@@ -191,7 +191,7 @@ For more information, also see:
 - **Email**
     
     > b10247050@gmail.com
-    > 
+    <br />
     r08633005@ntu.edu.tw
     >
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
