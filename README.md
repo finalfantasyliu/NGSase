@@ -41,13 +41,13 @@
 
 The NGS analysis used to be intimidating and had a higher learning curve for "non-coding" persons. It is not easy for biologists who wish to engage in NGS analysis to gather powerful evidence from a gene perspective. Nowadays, practical and useful interactive NGS analysis interfaces are still controlled by biotech companies. Open-source analysis websites may even become archived or lack highly customized pipeline construction options. Therefore, young and inexperienced biologists or those passionate about biology may need to invest significant effort in learning coding or spend substantial amounts of money on NGS analysis.
 
-NGSase is designed to provide a user-friendly and highly customized interface to its target audience.Here are three highlight features: 
+NGSase is designed to provide a user-friendly and highly customized interface to its target audience. Here are three highlight features: 
 
 - Users can easily combine various NGS tools to create their own pipelines.
 - Each pipeline can be executed concurrently, enhancing efficiency.
 - Users can effortlessly set up NGSase web servers for internal use.
 
-**Furthermore, NGSase has a lightweight server architecture which is developed from scratch without using any existed web framework.**
+**Furthermore, NGSase has a lightweight server architecture which is developed from scratch without using any web frameworks.**
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built With
@@ -64,9 +64,9 @@ NGSase is designed to provide a user-friendly and highly customized interface to
 NGSase is currently supported only on MacOS and FreeBSD. Compatibility for other platforms will be considered in the near future.
 ## Prerequisites
 
-The NGSase relies on various NGS analysis tools to construct a flexible pipeline for users. Currently, it is compatible with **fastp**, **cutadapt**, **kallisto**, and **subread**. These programs can be installed using **homebrew**, **bioconda**, or by manual installation. However, ensure that you can call these programs in your environment.  
+The NGSase relies on various NGS analysis tools to construct a flexible pipeline for users. Currently, it is compatible with **fastp**, **cutadapt**, **kallisto**, and **subread**. These programs can be installed using **homebrew**, **bioconda**, or by manual installation. However, make sure that your enviroment is properly set up before installation.  
 
-**The following install tutorial is based on MacOS with ARM architecture**
+**The following installation guide is based on MacOS with ARM architecture**
 
 ### kallisto
 
@@ -90,7 +90,7 @@ fastp -h
 
 ```bash
 #install cutadapt
-sudo apt install pipx python3-venv
+brew install pipx python3-venv
 pipx install cutadapt
 #check installation
 cutadapt --version
@@ -143,7 +143,7 @@ brew install mysql
 
 # Usage
 
-- Please fill out all options after **`./NGSase`**. For example:
+1. Please fill out all options after **`./NGSase`**. For example:
     
     ```bash
     ./NGSase -a 127.0.0.1 -p 4500 -b 5 -minMainWT 1 -maxMainWT 2 -minSubWT 1 -maxSubWT 6 -sqlHost localhost -sqlUser BIOLAB -sqlPW 1234567
@@ -167,8 +167,7 @@ brew install mysql
         -sqlPW         Password of MySQL
         -h             argument information
         ```
-        
-- Fill URL with your server configuration and combine with entry file for NGSase (login.html) in your browser. For example:
+2. Fill URL with your server configuration and combine with entry file for NGSase (login.html) in your browser. For example:
     
     ```bash
     http://127.0.0.1:4500/login.html
@@ -177,7 +176,7 @@ brew install mysql
     ![NGSase_URL](readme_images/NGSase_URL.gif)
     
 
-For more information, also see:
+For more information about project design, please see:
 
 - [NGSase System Design](https://sharp-wandflower-7df.notion.site/NGSase-System-Design-41e93538f72448b18d8d8440da4ac045?pvs=4)
 
